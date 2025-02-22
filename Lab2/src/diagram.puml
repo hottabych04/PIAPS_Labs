@@ -1,0 +1,66 @@
+@startuml
+interface Vehicle {
+    +boardDriver(Driver driver)
+    +boardPassenger(Passenger passenger)
+    +isReadyToGo() : boolean
+}
+
+abstract class Driver
+class BusDriver extends Driver
+class TaxiDriver extends Driver
+
+abstract class Passenger {
+    -category : String
+    +getCategory() : String
+}
+
+class AdultPassenger extends Passenger
+class BeneficiaryPassenger extends Passenger
+class ChildPassenger extends Passenger
+class TaxiAdultPassenger extends Passenger
+class TaxiChildPassenger extends Passenger
+
+class Bus {
+    -driver : BusDriver
+    -passengers : int
+    -maxPassengers : int = 30
+    +boardDriver(Driver driver)
+    +boardPassenger(Passenger passenger)
+    +isReadyToGo() : boolean
+}
+
+class Taxi {
+    -driver : TaxiDriver
+    -passengers : int
+    -maxPassengers : int = 4
+    +boardDriver(Driver driver)
+    +boardPassenger(Passenger passenger)
+    +isReadyToGo() : boolean
+}
+
+abstract class VehicleBuilder {
+    -vehicle : Vehicle
+    +setDriver(Driver driver) : VehicleBuilder
+    +addPassenger(Passenger passenger) : VehicleBuilder
+    +build() : Vehicle
+}
+
+class BusBuilder extends VehicleBuilder
+class TaxiBuilder extends VehicleBuilder
+
+class Main {
+    +main(String[] args)
+}
+
+Vehicle <|-- Bus
+Vehicle <|-- Taxi
+Driver <|-- BusDriver
+Driver <|-- TaxiDriver
+Passenger <|-- AdultPassenger
+Passenger <|-- BeneficiaryPassenger
+Passenger <|-- ChildPassenger
+Passenger <|-- TaxiAdultPassenger
+Passenger <|-- TaxiChildPassenger
+VehicleBuilder <|-- BusBuilder
+VehicleBuilder <|-- TaxiBuilder
+@enduml
