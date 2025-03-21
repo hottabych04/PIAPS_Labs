@@ -1,0 +1,46 @@
+@startuml
+    participant Client
+    participant TextEditor
+    participant Context
+    participant MultipleSpacesExpression
+    participant HyphenToEmDashExpression
+    participant QuotationMarksExpression
+    participant TabCorrectionExpression
+    participant BracketSpacesExpression
+    participant PunctuationSpacesExpression
+    participant MultipleLineBreaksExpression
+
+    Client->>TextEditor: correctText(inputText)
+    TextEditor->>Context: create(inputText)
+    TextEditor->>MultipleSpacesExpression: interpret(context)
+    MultipleSpacesExpression->>Context: getText()
+    MultipleSpacesExpression->>Context: setText(correctedText)
+
+    TextEditor->>HyphenToEmDashExpression: interpret(context)
+    HyphenToEmDashExpression->>Context: getText()
+    HyphenToEmDashExpression->>Context: setText(correctedText)
+
+    TextEditor->>QuotationMarksExpression: interpret(context)
+    QuotationMarksExpression->>Context: getText()
+    QuotationMarksExpression->>Context: setText(correctedText)
+
+    TextEditor->>TabCorrectionExpression: interpret(context)
+    TabCorrectionExpression->>Context: getText()
+    TabCorrectionExpression->>Context: setText(correctedText)
+
+    TextEditor->>BracketSpacesExpression: interpret(context)
+    BracketSpacesExpression->>Context: getText()
+    BracketSpacesExpression->>Context: setText(correctedText)
+
+    TextEditor->>PunctuationSpacesExpression: interpret(context)
+    PunctuationSpacesExpression->>Context: getText()
+    PunctuationSpacesExpression->>Context: setText(correctedText)
+
+    TextEditor->>MultipleLineBreaksExpression: interpret(context)
+    MultipleLineBreaksExpression->>Context: getText()
+    MultipleLineBreaksExpression->>Context: setText(correctedText)
+
+    TextEditor->>Context: getText()
+    TextEditor-->>Client: return correctedText
+
+@enduml

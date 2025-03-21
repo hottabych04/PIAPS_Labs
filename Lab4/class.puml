@@ -1,0 +1,50 @@
+@startuml
+    class Image {
+        <<interface>>
+        +draw(int x, int y)
+        +getWidth() int
+        +getHeight() int
+    }
+
+    class RealImage {
+        -filename: String
+        -image: BufferedImage
+        -width: int
+        -height: int
+        +RealImage(String filename)
+        +loadImageFromDisk()
+        +draw(int x, int y)
+        +getWidth() int
+        +getHeight() int
+    }
+
+    class ProxyImage {
+        -filename: String
+        -realImage: RealImage
+        -width: int
+        -height: int
+        -isLoaded: boolean
+        +ProxyImage(String filename)
+        +draw(int x, int y)
+        +getWidth() int
+        +getHeight() int
+        +loadImage()
+    }
+
+    class EditorApp {
+        -image: Image
+        -currentX: int
+        -currentY: int
+        -isDragging: boolean
+        -isImageLoaded: boolean
+        +EditorApp()
+        +initialize()
+        +run()
+        +handleMouseEvents()
+    }
+
+    Image <|.. RealImage
+    Image <|.. ProxyImage
+    EditorApp --> Image
+    ProxyImage --> RealImage
+@enduml

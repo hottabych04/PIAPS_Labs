@@ -1,0 +1,61 @@
+@startuml
+
+    actor Client
+    participant ALS as AirplaneLoadingSystem
+    participant Airplane
+    participant Pilot
+    participant FlightAttendant
+    participant PassengerClass
+    participant Passenger
+    participant Luggage
+    
+    Client->>ALS: main()
+    ALS->>Airplane: new Airplane(maxLuggageWeight)
+    
+    title Добавление персонала
+    ALS->>Pilot: new Pilot(name, id, rank)
+    ALS->>Airplane: addPilot(pilot)
+    ALS->>FlightAttendant: new FlightAttendant(name, id, position)
+    ALS->>Airplane: addFlightAttendant(attendant)
+    
+    title Добавление пассажиров
+    loop для каждого пассажира
+        ALS->>PassengerClass: new PassengerClass(type)
+        ALS->>Luggage: new Luggage(weight)
+        ALS->>Passenger: new Passenger(name, id, class, luggageWeight)
+        ALS->>Airplane: addPassenger(passenger)
+    end
+    
+    title Проверка и оптимизация веса багажа
+    ALS->>Airplane: getCurrentLuggageWeight()
+    Airplane-->>ALS: weight
+    ALS->>Airplane: getLuggageOverweight()
+    Airplane-->>ALS: overweight
+    
+    title Оптимизация веса багажа при необходимости
+    alt overweight > 0
+        ALS->>Airplane: optimizeLuggageWeight()
+        
+        title Внутренняя логика оптимизации
+        Airplane->>Airplane: getLuggageOverweight()
+        
+        loop для пассажиров эконом-класса с избыточным весом
+            Airplane->>Passenger: getExcessLuggageWeight()
+            Passenger-->>Airplane: excessWeight
+            Airplane->>Passenger: getLuggage()
+            Passenger-->>Airplane: luggage
+            Airplane->>Luggage: setStatus("Снят с рейса")
+            Airplane->>Airplane: removedLuggage.add(luggage)
+        end
+    end
+    
+    title Проверка готовности самолета к отправлению
+    ALS->>Airplane: isReadyForDeparture()
+    Airplane-->>ALS: status
+    
+    title Генерация отчета
+    ALS->>Airplane: generateLoadingReport()
+    Airplane-->>ALS: report
+    ALS-->>Client: Вывод отчета
+
+@enduml

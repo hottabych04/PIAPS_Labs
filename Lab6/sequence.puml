@@ -1,0 +1,21 @@
+@startuml
+    participant Teacher
+    participant Group
+    participant AcademicPerformanceSystem
+    participant DeanOffice
+    participant Department
+
+    Teacher ->>Group: createWeeklyReport(group, weekNumber)
+    Group->>Group: addReport(report)
+
+    Note over AcademicPerformanceSystem: Еженедельная проверка
+    APS->>Group: getLatestReport()
+    alt Отчет отсутствует или устарел
+        AcademicPerformanceSystem->>DeanOffice: update("Отсутствует отчет для группы " + groupId)
+        DeanOffice->>Department: notifyDepartment(teacher.getDepartment())
+        Department->>Teacher: receiveNotification("Срочно предоставить отчет")
+    else Отчет актуален
+        AcademicPerformanceSystem->>AcademicPerformanceSystemS: Продолжить мониторинг
+    end
+
+@enduml

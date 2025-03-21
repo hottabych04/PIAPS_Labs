@@ -1,0 +1,49 @@
+@startuml
+    participant User
+    participant EditorApp
+    participant ProxyImage
+    participant RealImage
+
+    User->>EditorApp: Запуск приложения
+    activate EditorApp
+    EditorApp->>ProxyImage: создание ProxyImage("TestImage")
+    activate ProxyImage
+    ProxyImage-->>EditorApp: возврат proxy объекта
+    deactivate ProxyImage
+
+    EditorApp->>ProxyImage: getWidth(), getHeight()
+    activate ProxyImage
+    ProxyImage-->>EditorApp: размеры изображения
+    deactivate ProxyImage
+
+    EditorApp-->>User: отображение пустого бокса
+
+    User->>EditorApp: перетаскивание мышью
+    EditorApp->>ProxyImage: draw(newX, newY)
+    activate ProxyImage
+    ProxyImage-->>EditorApp: отрисовка пустого бокса
+    deactivate ProxyImage
+
+    User->>EditorApp: двойной клик правой кнопкой
+    EditorApp->>ProxyImage: loadImage()
+    activate ProxyImage
+    ProxyImage->>RealImage: создание RealImage("TestImage")
+    activate RealImage
+    RealImage->>RealImage: loadImageFromDisk()
+    RealImage-->>ProxyImage: возврат загруженного изображения
+    deactivate RealImage
+    ProxyImage-->>EditorApp: изображение загружено
+    deactivate ProxyImage
+
+    EditorApp->>ProxyImage: draw(currentX, currentY)
+    activate ProxyImage
+    ProxyImage->>RealImage: draw(currentX, currentY)
+    activate RealImage
+    RealImage-->>ProxyImage: отрисовка реального изображения
+    deactivate RealImage
+    ProxyImage-->>EditorApp: отображение реального изображения
+    deactivate ProxyImage
+
+    EditorApp-->>User: отображение реального изображения
+    deactivate EditorApp
+@enduml

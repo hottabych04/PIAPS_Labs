@@ -1,0 +1,99 @@
+@startuml
+
+    class Person {
+        <<abstract>>
+        -String name
+        -String id
+        +getName() String
+        +getId() String
+        +toString() String
+    }
+
+    class Passenger {
+        -Luggage luggage
+        -PassengerClass passengerClass
+        +getFreeLuggageAllowance() double
+        +getExcessLuggageWeight() double
+        +removeLuggage() void
+    }
+
+    class Pilot {
+        -String rank
+        +getRank() String
+    }
+
+    class FlightAttendant {
+        -String position
+        +getPosition() String
+    }
+
+    class Luggage {
+        -double weight
+        -String status
+        +getWeight() double
+        +getStatus() String
+        +setStatus(String) void
+    }
+
+    class PassengerClass {
+        -ClassType type
+        -int maxPassengers
+        -List~Passenger~ passengers
+        +getType() ClassType
+        +addPassenger(Passenger) boolean
+        +getPassengers() List~Passenger~
+        +getCurrentPassengerCount() int
+        +getMaxPassengers() int
+        +getFreeLuggageAllowance() double
+    }
+
+    class Airplane {
+        -static int MAX_PILOTS
+        -static int MAX_ATTENDANTS
+        -double maxLuggageWeight
+        -List~Pilot~ pilots
+        -List~FlightAttendant~ attendants
+        -PassengerClass firstClass
+        -PassengerClass businessClass
+        -PassengerClass economyClass
+        -List~Luggage~ removedLuggage
+        +addPilot(Pilot) boolean
+        +addFlightAttendant(FlightAttendant) boolean
+        +addPassenger(Passenger) boolean
+        +getCurrentLuggageWeight() double
+        +getLuggageOverweight() double
+        +optimizeLuggageWeight() void
+        +isReadyForDeparture() boolean
+        +getRemovedLuggage() List~Luggage~
+        +generateLoadingReport() String
+    }
+
+    class AirplaneLoadingSystem {
+        +main(String[]) void
+    }
+
+    class ClassType {
+        <<enumeration>>
+        FIRST
+        BUSINESS
+        ECONOMY
+    }
+
+    Person <|-- Passenger
+    Person <|-- Pilot
+    Person <|-- FlightAttendant
+
+    Passenger "1" -- "1" Luggage
+    Passenger "1" -- "1" PassengerClass
+    PassengerClass "1" -- "1" ClassType
+
+    Airplane "1" -- "0..2" Pilot
+    Airplane "1" -- "0..6" FlightAttendant
+    Airplane "1" -- "1" PassengerClass : firstClass
+    Airplane "1" -- "1" PassengerClass : businessClass
+    Airplane "1" -- "1" PassengerClass : economyClass
+    Airplane "1" -- "0..*" Luggage : removedLuggage
+
+    AirplaneLoadingSystem ..> Airplane : creates
+
+@enduml

@@ -1,0 +1,87 @@
+@startuml
+    class Subject {
+        -List~Observer~ observers
+        +registerObserver(Observer o)
+        +removeObserver(Observer o)
+        +notifyObservers()
+    }
+
+    class ConcreteSubject {
+        -String state
+        +setState(String s)
+        +getState()
+    }
+
+    class Observer {
+        <<interface>>
+        +update(String state)
+    }
+
+    class AcademicPerformanceSystem {
+        -Map~String, Group~ groups
+        +addGroup(Group g)
+        +getGroup(String groupId)
+        +notifyAboutMissingReports()
+    }
+
+    class Group {
+        -String groupId
+        -String disciplineName
+        -Teacher teacher
+        -List~Student~ students
+        -List~WeeklyReport~ reports
+        +addReport(WeeklyReport report)
+        +getLatestReport()
+        +getTeacher()
+    }
+
+    class WeeklyReport {
+        -int weekNumber
+        -Date creationDate
+        -Map~Student, Integer~ grades
+        +addGrade(Student student, int grade)
+        +getGrade(Student student)
+        +getWeekNumber()
+        +getCreationDate()
+    }
+
+    class Teacher {
+        -String name
+        -String department
+        +createWeeklyReport(Group group, int weekNumber)
+        +getName()
+        +getDepartment()
+    }
+
+    class Student {
+        -String studentId
+        -String name
+        +getStudentId()
+        +getName()
+    }
+
+    class DeanOffice {
+        +update(String state)
+        +notifyDepartment(String departmentName)
+    }
+
+    class Department {
+        -String name
+        -List~Teacher~ teachers
+        +addTeacher(Teacher t)
+        +getName()
+        +getTeachers()
+        +receiveNotification(String message)
+    }
+
+    Subject <|-- AcademicPerformanceSystem
+    Observer <|-- DeanOffice
+    AcademicPerformanceSystem --> Group
+    Group --> Teacher
+    Group --> Student
+    Group --> WeeklyReport
+    WeeklyReport --> Student
+    Department --> Teacher
+    AcademicPerformanceSystem ..> Department : notifies
+
+@enduml

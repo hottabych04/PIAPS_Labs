@@ -1,0 +1,63 @@
+@startuml
+    class Context {
+        -String text
+        +Context(String text)
+        +String getText()
+        +void setText(String text)
+    }
+
+    class AbstractExpression {
+        <<interface>>
+        +void interpret(Context context)
+    }
+
+    class TerminalExpression {
+        <<abstract>>
+        +void interpret(Context context)
+    }
+
+    class MultipleSpacesExpression {
+        +void interpret(Context context)
+    }
+
+    class HyphenToEmDashExpression {
+        +void interpret(Context context)
+    }
+
+    class QuotationMarksExpression {
+        +void interpret(Context context)
+    }
+
+    class TabCorrectionExpression {
+        +void interpret(Context context)
+    }
+
+    class BracketSpacesExpression {
+        +void interpret(Context context)
+    }
+
+    class PunctuationSpacesExpression {
+        +void interpret(Context context)
+    }
+
+    class MultipleLineBreaksExpression {
+        +void interpret(Context context)
+    }
+
+    class TextEditor {
+        +String correctText(String text)
+    }
+
+    AbstractExpression <|-- TerminalExpression
+    TerminalExpression <|-- MultipleSpacesExpression
+    TerminalExpression <|-- HyphenToEmDashExpression
+    TerminalExpression <|-- QuotationMarksExpression
+    TerminalExpression <|-- TabCorrectionExpression
+    TerminalExpression <|-- BracketSpacesExpression
+    TerminalExpression <|-- PunctuationSpacesExpression
+    TerminalExpression <|-- MultipleLineBreaksExpression
+
+    TextEditor o-- AbstractExpression : uses
+    TextEditor --> Context : creates
+
+@enduml
